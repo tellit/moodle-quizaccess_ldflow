@@ -82,12 +82,12 @@ class quizaccess_ldflow extends quiz_access_rule_base {
             $isfirstattempt = count($finishedattempts) == 0 ? true : false;
 
             if ($isfirstattempt && $this->quiz->skipviewonfirstattempt) {
-                $url = $this->quizobj->start_attempt_url();
 
-                // TODO:.
+                // Don't redirect editors.
                 if ($this->is_editor()) {
                     return false;
                 } else {
+                    $url = $this->quizobj->start_attempt_url();
                     redirect($url);
                 }
             }
@@ -218,41 +218,6 @@ class quizaccess_ldflow extends quiz_access_rule_base {
     }
 
     /**
-     * @return array any options that are required for showing the attempt page
-     *      in a popup window.
-     */
-    public function get_popup_options() {
-        return array();
-    }
-
-    /**
-     * Sets up the attempt (review or summary) page with any special extra
-     * properties required by this rule. securewindow rule is an example of where
-     * this is used.
-     *
-     * @param moodle_page $page the page object to initialise.
-     */
-    public function setup_attempt_page($page) {
-        // Do nothing by default.
-    }
-
-    /**
-     * It is possible for one rule to override other rules.
-     *
-     * The aim is that third-party rules should be able to replace sandard rules
-     * if they want. See, for example MDL-13592.
-     *
-     * @return array plugin names of other rules that this one replaces.
-     *      For example array('ipaddress', 'password').
-     */
-    public function get_superceded_rules() {
-
-        // Disable list of rules.
-
-        return array();
-    }
-
-    /**
      * Add any fields that this rule requires to the quiz settings form. This
      * method is called from {@link mod_quiz_mod_form::definition()}, while the
      * security seciton is being built.
@@ -376,16 +341,10 @@ class quizaccess_ldflow extends quiz_access_rule_base {
         $entrypoint = end($callstack)['file'];
         $filename = pathinfo($entrypoint)['filename'];
 
-        switch ($filename) {
-            case self::ENTRY_VIEW:
-                return self::ENTRY_VIEW;
-            case self::ENTRY_SUMMARY:
-                return self::ENTRY_SUMMARY;
-            case self::ENTRY_REVIEW:
-                return self::ENTRY_REVIEW;
-
-            default:
-                return self::ENTRY_UNKNOWN;
+        if ($filename == self::ENTRY_VIEW || $filename == self::ENTRY_SUMMARY || $filename == self::ENTRY_REVIEW) {
+            return $filename;
         }
+
+        return self::ENTRY_UNKNOWN;
     }
 }
