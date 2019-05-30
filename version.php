@@ -25,6 +25,6 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-$plugin->version   = 2019052002;
-$plugin->requires  = 2019051100;
+$plugin->version   = 2019052000;
+$plugin->requires  = 2017010100;
 $plugin->component = 'quizaccess_ldflow';
