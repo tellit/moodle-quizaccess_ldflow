@@ -130,15 +130,15 @@ class quizaccess_ldflow extends quiz_access_rule_base {
      *         (may be '' if no message is appropriate).
      */
     public function description() {
-
+        $result = array();
         // Only show rules to content creators.
         if ($this->is_editor()) {
             $output = '' . PHP_EOL;
 
             $output .= html_writer::start_tag('div', array('style' => 'display:inline-block'));
             $output .= get_string('currentenabledsettingsfor', 'quizaccess_ldflow',
-                            get_string('pluginname', 'quizaccess_ldflow')
-            ) . PHP_EOL;
+                    get_string('pluginname', 'quizaccess_ldflow')
+                ) . PHP_EOL;
 
             $output .= html_writer::start_tag('ul', array('class' => 'text-left')) . PHP_EOL;
             if ($this->quiz->skipviewonfirstattempt) {
@@ -155,9 +155,9 @@ class quizaccess_ldflow extends quiz_access_rule_base {
             }
             $output .= html_writer::end_tag('ul') . PHP_EOL;
             $output .= html_writer::end_tag('div') . PHP_EOL;
-            return $output;
+            $result[] = $output;
         }
-        return '';
+        return $result;
     }
 
     /**
